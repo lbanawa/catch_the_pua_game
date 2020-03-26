@@ -153,9 +153,9 @@ class ViewController: UIViewController {
             // send user alert once timer reaches 0
             let alert = UIAlertController(title: "Time's Up", message: "Would you like to play again?", preferredStyle: UIAlertController.Style.alert)
             // create button for users to dismiss the alert
-            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+            let okButton = UIAlertAction(title: "No...", style: UIAlertAction.Style.cancel, handler: nil)
             // create button to allow users to play again
-            let replayButton = UIAlertAction(title: "Play Again", style: UIAlertAction.Style.default) { (UIAlertAction) in
+            let replayButton = UIAlertAction(title: "Oink Oink Yes!", style: UIAlertAction.Style.default) { (UIAlertAction) in
                 // replay function
                 self.score = 0 // reset score
                 self.scoreLabel.text = "Score: \(self.score)" // reset score text label
