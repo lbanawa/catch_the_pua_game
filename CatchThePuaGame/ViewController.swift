@@ -134,6 +134,15 @@ class ViewController: UIViewController {
             // create button to allow users to play again
             let replayButton = UIAlertAction(title: "Play Again", style: UIAlertAction.Style.default) { (UIAlertAction) in
                 // replay function
+                self.score = 0 // reset score
+                self.scoreLabel.text = "Score: \(self.score)" // reset score text label
+                self.counter = 10 // reset timer
+                self.timeLabel.text  = String(self.counter) // reset timer text label
+                
+                // call the timer functions again to allow replay
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.countDown), userInfo: nil, repeats: true)
+                self.hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.hidePua), userInfo: nil, repeats: true)
+                
                 
             }
             
