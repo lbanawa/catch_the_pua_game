@@ -126,6 +126,20 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="highScoreLabel" destination="Io1-TV-e3c" id="BCC-m3-xAi"/>
+                        <outlet property="pua1" destination="eCO-oq-9J0" id="TeF-FN-3JQ"/>
+                        <outlet property="pua2" destination="IeB-gx-cvq" id="fag-q3-lWa"/>
+                        <outlet property="pua3" destination="Z6f-Ep-0w2" id="r7o-Ci-L2J"/>
+                        <outlet property="pua4" destination="kbM-oc-c2K" id="ahO-lK-ugk"/>
+                        <outlet property="pua5" destination="FDe-5U-cui" id="RrH-Iv-Rdg"/>
+                        <outlet property="pua6" destination="RAg-Q6-XSf" id="DT1-zW-hav"/>
+                        <outlet property="pua7" destination="jEg-yP-rr5" id="VDt-j6-wKA"/>
+                        <outlet property="pua8" destination="p42-wI-TFs" id="S4o-vJ-vcr"/>
+                        <outlet property="pua9" destination="UER-27-DZE" id="j7S-Cg-Bjc"/>
+                        <outlet property="scoreLabel" destination="7lM-Sc-2v8" id="aFw-db-YZQ"/>
+                        <outlet property="timeLabel" destination="QjT-Rk-Xa8" id="MqC-2C-aSl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
