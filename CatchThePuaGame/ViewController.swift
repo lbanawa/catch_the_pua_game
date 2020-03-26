@@ -10,8 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // Variables
     var score = 0
+    var timer = Timer()
+    var counter = 0
     
+    // Views
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -64,14 +68,51 @@ class ViewController: UIViewController {
         pua8.addGestureRecognizer(recognizer8)
         pua9.addGestureRecognizer(recognizer9)
         
+        // Timers
+        counter = 10 // start the timer at 10
+        timeLabel.text = String(counter) // replace the time label with a string of the updated value from the counter
+        // change the time at one second intervals, use countDown() as the action, repeat until counter reaches 0
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        
     }
     
-    // action
+    // score action
     @objc func increaseScore() {
         // increase the score by 1
         score += 1
         // update score label with current score each time score increases
         scoreLabel.text = "Score: \(score)"
+    }
+    
+    // timer action
+    @objc func countDown() {
+        // decrease counter by 1
+        counter -= 1
+        // update time label with current time each instance time decreases
+        timeLabel.text = String(counter)
+        
+        // stop counting down once counter reaches 0
+        if counter == 0 {
+            timer.invalidate()
+            
+            // send user alert once timer reaches 0
+            let alert = UIAlertController(title: "Time's Up", message: "Would you like to play again?", preferredStyle: UIAlertController.Style.alert)
+            // create button for users to dismiss the alert
+            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+            // create button to allow users to play again
+            let replayButton = UIAlertAction(title: "Play Again", style: UIAlertAction.Style.default) { (UIAlertAction) in
+                // replay function
+                
+            }
+            
+            // add the buttons to the alerts
+            alert.addAction(okButton)
+            alert.addAction(replayButton)
+            // show the alert
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        
     }
 
 
