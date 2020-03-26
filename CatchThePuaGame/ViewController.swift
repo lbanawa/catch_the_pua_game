@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var counter = 0
     var puaArray = [UIImageView] ()
     var hideTimer = Timer()
+    var highScore = 0
     
     // Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -36,6 +37,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         scoreLabel.text =  "Score: \(score)"
+        
+        // check if high score exists -- if not, do not update
+        let storedHighScore = UserDefaults.standard.object(forKey: "highscore")
+        if storedHighScore == nil {
+            highScore = 0
+            highScoreLabel.text = "High Score: \(highScore)"
+        }
+        
+        // update high score if it exists
+        if let newScore = storedHighScore as? Int {
+            highScore = newScore
+            highScoreLabel.text = "High Score: \(highScore)"
+        }
+        
         
         // enable the images to be interacted with/ tapped
         pua1.isUserInteractionEnabled = true
@@ -125,6 +140,14 @@ class ViewController: UIViewController {
             for pua in puaArray {
                 pua.isHidden = true
             }
+            
+            // high score update function
+            if self.score > self.highScore {
+                self.highScore = self.score // set high score equal to score if new score is higher than current high score
+                highScoreLabel.text = "High Score: \(highScore)" // update high score label text with new high score
+                UserDefaults.standard.set(self.highScore, forKey: "highscore") // store this value
+            }
+            
             
             
             // send user alert once timer reaches 0
