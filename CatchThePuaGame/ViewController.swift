@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
     var counter = 0
+    var puaArray = [UIImageView] ()
+    var hideTimer = Timer()
     
     // Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -68,11 +70,34 @@ class ViewController: UIViewController {
         pua8.addGestureRecognizer(recognizer8)
         pua9.addGestureRecognizer(recognizer9)
         
+        puaArray = [pua1, pua2, pua3, pua4, pua5, pua6, pua7, pua8, pua9]
+        
         // Timers
         counter = 10 // start the timer at 10
         timeLabel.text = String(counter) // replace the time label with a string of the updated value from the counter
         // change the time at one second intervals, use countDown() as the action, repeat until counter reaches 0
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        // change the visible image at 0.5 second intervals, use hidePua() as the action, repeat until counter reaches 0
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hidePua), userInfo: nil, repeats: true)
+        
+        hidePua()
+        
+    }
+    
+    
+    
+    // image action
+    @objc func hidePua() {
+        // make all images hidden initially
+        for pua in puaArray {
+            pua.isHidden = true
+        }
+        
+        // randomly give a number between 0 and 8 because 8 is the highest index value in the puaArray -- convert to an integer
+        let random = Int(arc4random_uniform(UInt32(puaArray.count - 1)))
+        
+        // choose one image, using the index value generated randomly, to make visible to the user
+        puaArray[random].isHidden = false
         
     }
     
@@ -91,9 +116,16 @@ class ViewController: UIViewController {
         // update time label with current time each instance time decreases
         timeLabel.text = String(counter)
         
-        // stop counting down once counter reaches 0
+        // stop counting down and animating images once counter reaches 0
         if counter == 0 {
             timer.invalidate()
+            hideTimer.invalidate()
+            
+            // hide all images once counter reaches 0
+            for pua in puaArray {
+                pua.isHidden = true
+            }
+            
             
             // send user alert once timer reaches 0
             let alert = UIAlertController(title: "Time's Up", message: "Would you like to play again?", preferredStyle: UIAlertController.Style.alert)
