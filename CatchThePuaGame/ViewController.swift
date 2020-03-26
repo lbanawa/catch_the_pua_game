@@ -14,6 +14,9 @@ class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
     var counter = 0
+    var puaArray = [UIImageView] ()
+    var hideTimer = Timer()
+    var highScore = 0
     
     // Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -34,6 +37,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         scoreLabel.text =  "Score: \(score)"
+        
+        // check if high score exists -- if not, do not update
+        let storedHighScore = UserDefaults.standard.object(forKey: "highscore")
+        if storedHighScore == nil {
+            highScore = 0
+            highScoreLabel.text = "High Score: \(highScore)"
+        }
+        
+        // update high score if it exists
+        if let newScore = storedHighScore as? Int {
+            highScore = newScore
+            highScoreLabel.text = "High Score: \(highScore)"
+        }
+        
         
         // enable the images to be interacted with/ tapped
         pua1.isUserInteractionEnabled = true
@@ -68,11 +85,34 @@ class ViewController: UIViewController {
         pua8.addGestureRecognizer(recognizer8)
         pua9.addGestureRecognizer(recognizer9)
         
+        puaArray = [pua1, pua2, pua3, pua4, pua5, pua6, pua7, pua8, pua9]
+        
         // Timers
         counter = 10 // start the timer at 10
         timeLabel.text = String(counter) // replace the time label with a string of the updated value from the counter
         // change the time at one second intervals, use countDown() as the action, repeat until counter reaches 0
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        // change the visible image at 0.5 second intervals, use hidePua() as the action, repeat until counter reaches 0
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hidePua), userInfo: nil, repeats: true)
+        
+        hidePua()
+        
+    }
+    
+    
+    
+    // image action
+    @objc func hidePua() {
+        // make all images hidden initially
+        for pua in puaArray {
+            pua.isHidden = true
+        }
+        
+        // randomly give a number between 0 and 8 because 8 is the highest index value in the puaArray -- convert to an integer
+        let random = Int(arc4random_uniform(UInt32(puaArray.count - 1)))
+        
+        // choose one image, using the index value generated randomly, to make visible to the user
+        puaArray[random].isHidden = false
         
     }
     
@@ -91,9 +131,24 @@ class ViewController: UIViewController {
         // update time label with current time each instance time decreases
         timeLabel.text = String(counter)
         
-        // stop counting down once counter reaches 0
+        // stop counting down and animating images once counter reaches 0
         if counter == 0 {
             timer.invalidate()
+            hideTimer.invalidate()
+            
+            // hide all images once counter reaches 0
+            for pua in puaArray {
+                pua.isHidden = true
+            }
+            
+            // high score update function
+            if self.score > self.highScore {
+                self.highScore = self.score // set high score equal to score if new score is higher than current high score
+                highScoreLabel.text = "High Score: \(highScore)" // update high score label text with new high score
+                UserDefaults.standard.set(self.highScore, forKey: "highscore") // store this value
+            }
+            
+            
             
             // send user alert once timer reaches 0
             let alert = UIAlertController(title: "Time's Up", message: "Would you like to play again?", preferredStyle: UIAlertController.Style.alert)
@@ -102,6 +157,15 @@ class ViewController: UIViewController {
             // create button to allow users to play again
             let replayButton = UIAlertAction(title: "Play Again", style: UIAlertAction.Style.default) { (UIAlertAction) in
                 // replay function
+                self.score = 0 // reset score
+                self.scoreLabel.text = "Score: \(self.score)" // reset score text label
+                self.counter = 10 // reset timer
+                self.timeLabel.text  = String(self.counter) // reset timer text label
+                
+                // call the timer functions again to allow replay
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.countDown), userInfo: nil, repeats: true)
+                self.hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.hidePua), userInfo: nil, repeats: true)
+                
                 
             }
             
